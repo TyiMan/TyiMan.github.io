@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+    <!-- 
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.0 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            Java基础知识复习笔记(3)--线程基础 | 
+        
+        TyiMan&#39;s Blog
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="TyiMan">
+    <meta name="description" content="技术也关注用户体验;Java;BigData;大数据;机器学习;深度学习;Java Web;前端技术">
+    <meta name="keywords" content="null,Java">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="TyiMan&#39;s Blog">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://blog.code5bug.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Java基础知识复习笔记(3)--线程基础 | TyiMan&#39;s Blog">
+    <meta property="og:description" content="技术也关注用户体验;Java;BigData;大数据;机器学习;深度学习;Java Web;前端技术">
+    <meta property="og:article:tag" content="Java"> 
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="/css/material.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+    <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-image: url(/img/bg.png);
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/queue.js"></script>
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+    <!-- Bing Background -->
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#线程概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">线程概念</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Java线程的创建和启动"><span class="post-toc-number">2.</span> <span class="post-toc-text">Java线程的创建和启动</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#线程的生命周期"><span class="post-toc-number">3.</span> <span class="post-toc-text">线程的生命周期</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#四、线程的同步与锁"><span class="post-toc-number">4.</span> <span class="post-toc-text">四、线程的同步与锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#线程的交互与调度（线程状态转换实例）"><span class="post-toc-number">5.</span> <span class="post-toc-text">线程的交互与调度（线程状态转换实例）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#线程基础总结"><span class="post-toc-number">6.</span> <span class="post-toc-text">线程基础总结</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#参考引用"><span class="post-toc-number">7.</span> <span class="post-toc-text">参考引用</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').css('background-image', 'url(' + '/img/random/material-' + randomNum + '.png' + ')');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Java基础知识复习笔记(3)--线程基础
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>TyiMan</strong>
+        <span>3月 26, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/Java/">Java</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+        
+            <!-- Busuanzi Views -->
+            <a class="post_share-link" href="#">
+                <li class="mdl-menu__item">
+                    <span id="busuanzi_container_page_pv">
+                        <span id="busuanzi_value_page_pv"></span>&nbsp;浏览量
+                    </span>
+                </li>
+            </a>
+        
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Java基础知识复习笔记(3)--线程基础&url=http://blog.code5bug.com//2017/03/26/Java基础知识复习笔记-3-线程基础/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                分享到微博
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Java基础知识复习笔记(3)--线程基础&url=http://blog.code5bug.com//2017/03/26/Java基础知识复习笔记-3-线程基础/index.html&via=TyiMan" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.code5bug.com//2017/03/26/Java基础知识复习笔记-3-线程基础/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://blog.code5bug.com//2017/03/26/Java基础知识复习笔记-3-线程基础/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+        <a class="post_share-link" href="https://www.linkedin.com/shareArticle?mini=true&url=http://blog.code5bug.com//2017/03/26/Java基础知识复习笔记-3-线程基础/index.html&title=Java基础知识复习笔记(3)--线程基础" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 LinkedIn
+            </li>
+        </a>
+    
+
+    <!-- Share QQ -->
+    
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=TyiMan&#39;s Blog&title=Java基础知识复习笔记(3)--线程基础&summary=技术也关注用户体验;Java;BigData;大数据;机器学习;深度学习;Java Web;前端技术&pics=http://blog.code5bug.com/img/favicon.png&url=http://blog.code5bug.com/2017/03/26/Java基础知识复习笔记-3-线程基础/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 QQ
+            </li>
+        </a>
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h4 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h4><p><strong>1. 操作系统中的线程</strong><br>现在的操作系统是多任务操作系统，多线程是实现多任务的一种方式，在操作系统中，每一个进程都有操作系统分配给它的独立内存空间，线程是进程中的一个执行流程，一个进程中可以启动多个线程。线程总是属于某一个进程，进程中的多线程共享进程的内存。<br><strong>2. Java中的线程</strong><br>在Java中，线程指两件不同的事情：一是java.lang.Thread类的一个实例，二是线程的执行。</p>
+<ul>
+<li>使用java.lang.Thread类或者java.lang.Runnable接口编写代码来定义、实例化和启动新线程。</li>
+<li>一个Thread类的实例只是一个对象，像Java中的任何其他对象一样，具有变量和方法，生死与堆上。</li>
+<li>Java中每个线程都有一个自己的调用栈，即使不在程序中创建任何新线程，线程也在后台运行着。一旦创建一个新的线程，就产生一个新的调用栈。<blockquote>
+<p>线程栈：<br>Java为了实现平台无关性, 必须解决不同操作系统中进程，线程的差异，因此Java建立了一套自己的进程与线程机制。  这套机制与windows系统的颇为相似，但是底层实现确实根据不同平台的机制进行实现。<br><strong>线程栈</strong>存储的信息是指某时刻线程中方法调度的信息，当前调用的方法总是位于栈顶。  当某个方法被调用时，此方法的相关信息压入栈顶。 </p>
+</blockquote>
+</li>
+<li>一个Java应用总是从main()方法开始运行，main()方法运行在一个线程内，它被称为主线程。</li>
+<li>线程总体分两类：用户线程和守候线程。当所有用户线程执行完毕的时候，JVM自动关闭。但是守候线程却不独立于JVM，守候线程一般是由操作系统或者用户自己创建的。<blockquote>
+<p><strong>守护线程的作用</strong>是为其他线程的运行提供服务，比如说GC线程。其实用户线程和守护线程本质上来说去没啥区别的，唯一的区别之处就在虚拟机的离开：如果用户线程全部撤离，那么守护线程也就没啥线程好服务的了，所以虚拟机也就退出了。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Java线程的创建和启动"><a href="#Java线程的创建和启动" class="headerlink" title="Java线程的创建和启动"></a>Java线程的创建和启动</h4><p><strong>1. 线程的创建</strong><br>Java创建线程有两种方法，<br>第一种：继承java.lang.Thread类，重写run方法；<br>第二种，实现java.lang.Runnable接口，实现run方法。</p>
+<blockquote>
+<p><strong>两种生成线程对象的区别：</strong><br>1.两种方法均需执行线程的start方法为线程分配必须的系统资源、调度线程运行并执行线程的run方法。<br>2.在具体应用中，采用哪种方法来构造线程体要视情况而定。通常，当一个线程已继承了另一个类时，就应该用第二种方法来构造，即实现Runnable接口。 </p>
+</blockquote>
+<p><strong>2. 线程的实例化</strong><br>第一种方法的创建的线程，直接new该线程类即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//Thread的构造函数</div><div class="line">public Thread( );</div><div class="line">public Thread(Runnable target);</div><div class="line">public Thread(String name);</div><div class="line">public Thread(Runnable target, String name);</div><div class="line">public Thread(ThreadGroup group, Runnable target);</div><div class="line">public Thread(ThreadGroup group, String name);</div><div class="line">public Thread(ThreadGroup group, Runnable target, String name);</div><div class="line">public Thread(ThreadGroup group, Runnable target, String name, long stackSize);</div></pre></td></tr></table></figure>
+<p>第二种方法创建的线程，需要调用Thread的构造方法进行实例化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//实现runnable接口的类，调用Thread的构造方法进行实例化</div><div class="line">Thread(Runnable target) </div><div class="line">Thread(Runnable target, String name) </div><div class="line">Thread(ThreadGroup group, Runnable target) </div><div class="line">Thread(ThreadGroup group, Runnable target, String name) </div><div class="line">Thread(ThreadGroup group, Runnable target, String name, long stackSize)</div></pre></td></tr></table></figure>
+<p><strong>3. 启动线程</strong></p>
+<ul>
+<li>在线程的Thread对象上调用<strong>start()</strong>方法来启动线程，可不是run()哟。</li>
+<li>run()方法没有任何特别之处。它只是新线程知道调用的方法名称(和签名)。因此，在Runnable上或者Thread上调用run方法是合法的，但并不启动新的线程。</li>
+<li>在调用start()方法之前：线程处于新状态中，新状态指有一个Thread对象，但还没有一个真正的线程。</li>
+<li>而在调用start()方法后，才会启动执行线程，该线程从新状态变为可运行状态，当线程获得执行机会后，再运行run()方法。</li>
+</ul>
+<p><strong>4. 创建线程例子</strong><br>通过继承Thread创建线程  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.create;</div><div class="line">/** *Created by TyiMan on 2016/5/14. */</div><div class="line">public class MyThread extends Thread &#123;   </div><div class="line">  public MyThread() &#123;       </div><div class="line">    super();    </div><div class="line">  &#125;    </div><div class="line">  public MyThread(String name) &#123;       </div><div class="line">    super(name);    </div><div class="line">  &#125;    </div><div class="line">  public void run() &#123;        </div><div class="line">    for (int i = 0; i &lt; 3; i++)                    </div><div class="line">      System.out.println(Thread.currentThread().getName() + &quot; &quot; + i);    </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过实现Runnable接口创建线程  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.create;</div><div class="line">/** * Created by TyiMan on 2016/5/14. */</div><div class="line">public class MyRunnable implements Runnable &#123;    </div><div class="line">  @Override    </div><div class="line">  public void run() &#123;        </div><div class="line">    for(int i = 0;i&lt;3;i++)        </div><div class="line">      System.out.println(Thread.currentThread().getName()+&quot; &quot;+i);     </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>主函数实例化线程并且运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.create;</div><div class="line">/** * Created by TyiMan on 2016/5/14. */</div><div class="line">public class Main &#123;    </div><div class="line">  public static void main(String[]args)&#123;       </div><div class="line">    Thread thread1 = new MyThread();        </div><div class="line">    Thread thread2 = new Thread(new MyRunnable());        </div><div class="line">    Thread thread3 = new MyThread(&quot;MyThread&quot;);        </div><div class="line">    Thread thread4 = new Thread(new MyRunnable(),&quot;MyRunnable&quot;);       </div><div class="line"></div><div class="line">    thread1.start();        </div><div class="line">    thread2.start();       </div><div class="line">    thread3.start();        </div><div class="line">    thread4.start();    </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">//执行结果是按照顺序的，如果循环次数更多，他们的输出就会这么有序了</div><div class="line">Thread-0 0</div><div class="line">Thread-0 1</div><div class="line">Thread-0 2</div><div class="line">Thread-1 0</div><div class="line">Thread-1 1</div><div class="line">Thread-1 2</div><div class="line">MyThread 0</div><div class="line">MyThread 1</div><div class="line">MyThread 2</div><div class="line">MyRunnable 0</div><div class="line">MyRunnable 1</div><div class="line">MyRunnable 2</div></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>一些常见问题</strong><br>1、线程的名字，名字有两个来源，一个是虚拟机自己给的名字，一个是你自己的定的名字<strong>（构造函数传线程名字或者setName方法）</strong>。在没有指定线程名字的情况下，虚拟机总会为线程指定名字，并且主线程的名字总是main，非主线程的名字Thread-number（该number将是自动增加的，并被所有的Thread对象所共享，因为它是static的成员变量）。<br>2、获取当前线程的对象的方法是：<strong>Thread.currentThread()</strong>；<br>3、想成的运行，只能保证：每个线程都将启动，每个线程都将运行直到完成。一系列线程以某种顺序启动并不意味着将按该顺序执行。对于任何一组启动的线程来说，调度程序<strong>不能保证其执行次序，持续时间也无法保证。</strong><br>4、当线程目标run()方法结束时该线程完成。<br>5、一旦线程启动，它就永远不能再重新启动。只有一个新的线程可以被启动，并且只能一次。一个可运行的线程或死线程可以被重新启动。<br>6、线程的调度是JVM的一部分，在一个CPU的机器上上，实际上一次只能运行一个线程。一次只有一个线程栈执行。JVM线程调度程序决定实际运行哪个处于可运行状态的线程。众多可运行线程中的某一个会被选中做为当前线程。可运行线程被选择运行的顺序是没有保障的。</p>
+</blockquote>
+<h4 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h4><p>与人有生老病死一样，线程要经历新建、就绪、运行、死亡和阻塞这5种不同的状态。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1281379-d967e4ff463dc0a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="线程的生命周期"><br>  <strong>新建（new Thread）</strong><br>当创建Thread类的一个实例（对象）时，此线程进入新建状态（未被启动）。例如：<strong>Thread  t1=new Thread();</strong></p>
+<p><strong>就绪（runnable）</strong><br>线程已经被启动，正在等待被分配给CPU时间片，也就是说此时线程正在就绪队列中排队等候得到CPU资源。例如：<strong>t1.start();</strong></p>
+<p><strong>运行（running）</strong><br>线程获得CPU资源正在执行任务（<strong>调用run()方法</strong>），此时除非此线程自动放弃CPU资源或者有优先级更高的线程进入，线程将一直运行到结束。</p>
+<p><strong>死亡（dead）</strong><br>当线程执行完毕或被其它线程杀死，线程就进入死亡状态，这时线程不可能再进入就绪状态等待执行。<br><strong>自然终止：</strong>正常<strong>运行run()方法后终止</strong><br><strong>异常终止：</strong>调用<strong>stop()</strong>方法让一个线程终止运行</p>
+<p><strong>阻塞（blocked）</strong><br>由于某种原因导致正在运行的线程让出CPU并暂停自己的执行，即进入阻塞状态。<br><strong>正在睡眠：</strong>用<strong>sleep(long t) 方法</strong>可使线程进入睡眠方式。一个睡眠着的线程在指定的时间过去可进入就绪状态。<br><strong>正在等待：</strong>调用<strong>wait()方法</strong>。（调用notify()方法回到就绪状态）<br><strong>被另一个线程所阻塞</strong>：调用<strong>suspend()方法</strong>。（调用resume()方法恢复）</p>
+<blockquote>
+<p>下面给出了Thread类中和各个状态相关的方法。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// 开始线程</div><div class="line">public void start( );</div><div class="line">public void run( );</div><div class="line">// 挂起和唤醒线程</div><div class="line">public void resume( );     // 不建议使用</div><div class="line">public void suspend( );    // 不建议使用</div><div class="line">public static void sleep(long millis);</div><div class="line">public static void sleep(long millis, int nanos);</div><div class="line">public static void yied() //可以对当前线程进行临时暂停（让线程将资源释放出来）</div><div class="line">// 终止线程</div><div class="line">public void stop( );       // 不建议使用</div><div class="line">public void interrupt( );</div><div class="line">// 得到线程状态</div><div class="line">public boolean isAlive( );</div><div class="line">public boolean isInterrupted( );</div><div class="line">public static boolean interrupted( );</div><div class="line">//join方法让线程加入执行，执行某一线程join方法的线程会被冻结，</div><div class="line">//等待某一线程执行结束，该线程才会恢复到可运行状态</div><div class="line">public void join( ) throws InterruptedException;</div></pre></td></tr></table></figure>
+<h4 id="四、线程的同步与锁"><a href="#四、线程的同步与锁" class="headerlink" title="四、线程的同步与锁"></a>四、线程的同步与锁</h4><p>线程的同步是为了防止多个线程访问一个数据对象时，对数据造成的破坏。<br><strong>Java线程锁的原理</strong> </p>
+<ul>
+<li>Java中每个对象都有一个内置锁，当程序运行到非静态的synchronized同步方法上时，自动获得与正在执行代码类的当前实例（this实例）有关的锁。</li>
+<li>获得一个对象的锁也称为获取锁、锁定对象、在对象上锁定或在对象上同步。当程序运行到synchronized同步方法或代码块时该对象锁才起作用。</li>
+<li>一个对象只有一个锁。所以，如果一个线程获得该锁，就没有其他线程可以获得锁，直到第一个线程释放（或返回）锁。这也意味着任何其他线程都不能进入该对象上的synchronized方法或代码块，直到该锁被释放。<br>*释放锁是指持锁线程退出了synchronized同步方法或代码块。</li>
+</ul>
+<p><strong>Java线程同步的synchronized关键字的使用</strong></p>
+<blockquote>
+<p><strong>关于同步与锁的要点：</strong><br>1）只能同步方法，而不能同步变量和类；<br>2）每个对象只有一个锁；当提到同步时，应该清楚在什么上同步？也就是说，在哪个对象上同步？<br>3）不必同步类中所有的方法，类可以同时拥有同步和非同步方法。<br>4）如果两个线程要执行一个类中的synchronized方法，并且两个线程使用相同的实例来调用方法，那么一次只能有一个线程能够执行方法，另一个需要等待，直到锁被释放。也就是说：如果一个线程在对象上获得一个锁，就没有任何其他线程可以进入（该对象的）类中的任何一个同步方法。<br>5）如果线程拥有同步和非同步方法，则非同步方法可以被多个线程自由访问而不受锁的限制。<br>6）线程睡眠时，它所持的任何锁都不会释放。<br>7）线程可以获得多个锁。比如，在一个对象的同步方法里面调用另外一个对象的同步方法，则获取了两个对象的同步锁。<br>8）同步损害并发性，应该尽可能缩小同步范围。同步不但可以同步整个方法，还可以同步方法中一部分代码块。<br>9）在使用同步代码块时候，应该指定在哪个对象上同步，也就是说要获取哪个对象的锁。要保证多个线程的同步，被锁定的对象，在它们之间是共享的（就是多个线程使用的同一个对象的锁）</p>
+</blockquote>
+<p>(1)同步方法<br>    使用synchronized关键字修饰方法。 当用此关键字修饰方法时，内置锁会保护整个方法。在调用该方法前，需要获得内置锁，否则就处于阻塞状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class TestSynClass extends Thread&#123;</div><div class="line"> public synchronized void synMethod()&#123;</div><div class="line">  //some codes</div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>(2)同步代码块<br>    使用synchronized关键字修饰代码语句块。 被该关键字修饰的语句块会自动被加上内置锁，从而实现同步。<strong>使用synchronized关键字将需要互斥的代码包含起来，并上一把锁。并且锁定的对象必须是多个线程之间共享的对象。</strong>（如下面实例中第三个就是无效的同步代码块）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class TestSynClass extends Thread&#123;</div><div class="line">   	private Object object = new Object();</div><div class="line">	public void synThisClass()&#123;</div><div class="line">     		synchronized(this)&#123;</div><div class="line">      		//some code</div><div class="line">     		&#125;</div><div class="line">    	&#125;</div><div class="line"></div><div class="line">    	public void synOtherObject()&#123;</div><div class="line">     		synchronized(object)&#123;</div><div class="line">      			//some code</div><div class="line">     		&#125;</div><div class="line">    	&#125;</div><div class="line"></div><div class="line">     	public void synDifferentObject()&#123;</div><div class="line">       	//这个方法是不能实现同步的，因为每次运行都会生成一个新的Object对象</div><div class="line">       	//不同调用者调用的是不同对象</div><div class="line">       	synchronized(new Object)&#123;</div><div class="line">         		//some code</div><div class="line">       	&#125;</div><div class="line">     	&#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>(3)synchronized作用于static 函数<br>要同步静态方法，一是在静态方法上加synchronized关键字，另一个是在整个类对象的锁，这个对象是就是这个类（XXX.class)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class TestSynClass extends Thread&#123;&#123;</div><div class="line"></div><div class="line"> public synchronized static void methodA()      &#123; </div><div class="line">       //some code</div><div class="line">  &#125;    </div><div class="line">  public static void methodB()    &#123;       </div><div class="line">    synchronized(TestSynClass.class) &#123;</div><div class="line">      //some code</div><div class="line">    &#125;  </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>线程同步小结</strong><br>1、线程同步的目的是为了保护多个线程反问一个资源时对资源的破坏。<br>2、线程同步方法是通过锁来实现，每个对象都有切仅有一个锁，这个锁与一个特定的对象关联，线程一旦获取了对象锁，其他访问该对象的线程就无法再访问该对象的其他同步方法。<br>3、对于静态同步方法，锁是针对这个类的，锁对象是该类的Class对象。静态和非静态方法的锁互不干预。一个线程获得锁，当在一个同步方法中访问另外对象上的同步方法时，会获取这两个对象锁。<br>4、对于同步，要时刻清醒在哪个对象上同步，这是关键。<br>5、编写线程安全的类，需要时刻注意对多个线程竞争访问资源的逻辑和安全做出正确的判断，对“原子”操作做出分析，并保证原子操作期间别的线程无法访问竞争资源。<br>6、当多个线程等待一个对象锁时，没有获取到锁的线程将发生阻塞。<br>7、死锁是线程间相互等待锁锁造成的，在实际中发生的概率非常的小。真让你写个死锁程序，并不一定好使。但是，一旦程序发生死锁，程序将死掉。</p>
+</blockquote>
+<h4 id="线程的交互与调度（线程状态转换实例）"><a href="#线程的交互与调度（线程状态转换实例）" class="headerlink" title="线程的交互与调度（线程状态转换实例）"></a>线程的交互与调度（线程状态转换实例）</h4><p><strong>1. 线程的交互</strong><br><strong>线程交互的方法</strong></p>
+<ul>
+<li><code>void notify()</code> 唤醒在此对象监视器上等待的单个线程。</li>
+<li><code>void notifyAll()</code>  唤醒在此对象监视器上等待的所有线程，应该在同步块中调用。  </li>
+<li><code>void wait()</code>导致当前的线程等待，直到其他线程调用此对象的 notify() 方法或 notifyAll() 方法。<br>当然，wait()还有另外两个重载方法：<br><code>void wait(long timeout)</code>导致当前的线程等待，直到其他线程调用此对象的 notify() 方法或 notifyAll() 方法，或者超过指定的时间量。<br><code>void wait(long timeout, int nanos)</code> 导致当前的线程等待，直到其他线程调用此对象的 notify() 方法或 notifyAll() 方法，或者其他某个线程中断当前线程，或者已超过某个实际时间量。<blockquote>
+<p><strong>关于线程/通知要关键点</strong><br>（1）<strong>必须从同步环境内调用wait()、notify()、notifyAll()方法。</strong>线程不能调用对象上等待或通知的方法，除非它拥有那个对象的锁。<br>（2）wait()、notify()、notifyAll()都是Object的实例方法。与每个对象具有锁一样，每个对象可以有一个线程列表，他们等待来自该信号（通知）。线程通过执行对象上的wait()方法获得这个等待列表。从那时候起，它不再执行任何其他指令，直到调用对象的notify()方法为止。如果多个线程在同一个对象上等待，则将只选择一个线程（不保证以何种顺序）继续执行。如果没有线程等待，则不采取任何特殊操作。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>线程交互的实例</strong></p>
+<ul>
+<li><strong>wait()/notify()的使用</strong></li>
+</ul>
+<blockquote>
+<p>当在对象上<strong>调用wait()方法时，执行该代码的线程立即放弃它在对象上的锁</strong>。然而调用notify()时，并不意味着这时线程会放弃其锁。如果线程荣然在完成同步代码，则线程在移出之前不会放弃锁。因此，只要调用notify()并不意味着这时该锁变得可用。</p>
+</blockquote>
+<p>主函数实例化线程，然后调用线程的wait()函数，等待线程计算1到100的和的结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line">/** * Created by TyiMan on 2016/5/16. */</div><div class="line">public class TestWaitNotifyMain &#123;   </div><div class="line">  public static void main(String[] args)&#123;        </div><div class="line">    TestThread thread = new TestThread();        </div><div class="line">    thread.start();        </div><div class="line">    synchronized (thread)&#123;            </div><div class="line">      try&#123;                </div><div class="line">        System.out.println(&quot;等待对象b完成计算……&quot;);               </div><div class="line">        thread.wait();           </div><div class="line">      &#125; catch (InterruptedException e) &#123;                </div><div class="line">        e.printStackTrace();            </div><div class="line">      &#125;            </div><div class="line">      System.out.println(&quot;线程计算结果为 total is &quot;+thread.total);        </div><div class="line">    &#125;    </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>TestThread类的run方法计算1到100的和，计算完后，调用notify()函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line">/** * Created by TyiMan on 2016/5/16. */</div><div class="line">public class TestThread extends Thread &#123;    </div><div class="line">  int total ;    </div><div class="line">  @Override    </div><div class="line">  public void run()&#123;        </div><div class="line">    synchronized (this)&#123;           </div><div class="line">      for(int i = 0;i&lt;=100;i++)&#123;                </div><div class="line">       total +=i;            </div><div class="line">      &#125;            </div><div class="line">      notify();        </div><div class="line">    &#125;    </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>wait()/notifyAll()的使用</strong><br>在多数情况下，最好通知等待某个对象的所有线程。如果这样做，可以在对象上使用notifyAll()让所有在此对象上等待的线程冲出等待区，返回到可运行状态。</li>
+</ul>
+<p>Calculator计算1到100的和，计算完唤醒所有其他线程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line">/** * Created by TyiMan on 2016/5/16. */</div><div class="line">public class Calculator extends Thread &#123;    </div><div class="line">  int total;   </div><div class="line">  @Override    </div><div class="line">  public void run() &#123;        </div><div class="line">    synchronized (this) &#123;            </div><div class="line">      for (int i = 0; i &lt; 101; i++) &#123;                </div><div class="line">        total += i;            </div><div class="line">      &#125; </div><div class="line">      notifyAll();        </div><div class="line">    &#125;   </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ResultReader类等待结果，被唤醒后显示Calculator类的计算结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by TyiMan on 2016/5/16.</div><div class="line"> */</div><div class="line">public class ReaderResult extends Thread &#123;</div><div class="line">    Calculator calculator;</div><div class="line"></div><div class="line">    public ReaderResult(Calculator c) &#123;</div><div class="line">        this.calculator = c;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (calculator) &#123;</div><div class="line">            try &#123;</div><div class="line">                System.out.println(Thread.currentThread() + &quot;等待计算结果。。。&quot;);</div><div class="line">                calculator.wait();</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            System.out.println(Thread.currentThread() + &quot;计算结果为：&quot; + calculator.total);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Calculator calculator = new Calculator();</div><div class="line"></div><div class="line">        //启动三个线程，分别获取计算结果</div><div class="line">        new ReaderResult(calculator).start();</div><div class="line">        new ReaderResult(calculator).start();</div><div class="line">        new ReaderResult(calculator).start();</div><div class="line">        //启动计算线程</div><div class="line">        calculator.start();</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Thread[Thread-1,5,main]等待计算结果。。。</div><div class="line">Thread[Thread-2,5,main]等待计算结果。。。</div><div class="line">Thread[Thread-3,5,main]等待计算结果。。。</div><div class="line">Thread[Thread-3,5,main]计算结果为：5050</div><div class="line">Thread[Thread-2,5,main]计算结果为：5050</div><div class="line">Thread[Thread-1,5,main]计算结果为：5050</div></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>问题注意</strong><br>实际上，上面代码中，我们期望的是读取结果的线程在计算线程调用notifyAll()之前等待即可。 但是，如果计算线程先执行，并在读取结果线程等待之前调用了notify()方法，那么又会发生什么呢？<br><strong>问题分析</strong><br>这种情况是可能发生的。因为无法保证线程的不同部分将按照什么顺序来执行。幸运的是当读取线程运行时，它只能马上进入等待状态，它没有做任何事情来检查等待的事件是否已经发生。因此，如果计算线程已经调用了notifyAll()方法，那么它就不会再次调用notifyAll()，并且等待的读取线程将永远保持等待。这当然是开发者所不愿意看到的问题。<br><strong>问题解决</strong><br>当等待的事件发生时，需要能够检查notifyAll()通知事件是否已经发生。通常是利用某种循环，该循环检查某个条件表达式，只有当正在等待的事情还没有发生的情况下，它才继续等待。</p>
+</blockquote>
+<p><strong>2. 线程的调度——休眠</strong><br>线程休眠的目的是使线程让出CPU的最简单的做法之一，线程休眠时候，会将CPU资源交给其他线程，以便能轮换执行，当休眠一定时间后，线程会苏醒，进入准备状态等待执行。<br>线程休眠的方法是<code>Thread.sleep(long millis)</code>和<code>Thread.sleep(long millis, int nanos)</code>，均为静态方法，那调用sleep休眠的哪个线程呢？简单说，哪个线程调用sleep，就休眠哪个线程。<br><strong>sleep()实例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by TyiMan on 2016/5/16.</div><div class="line"> */</div><div class="line">public class Test &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">    Thread t1 = new MyThread1();</div><div class="line">    Thread t2 = new Thread(new MyRunnable());</div><div class="line">    t1.start();</div><div class="line">    t2.start();</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyThread1 extends Thread &#123;</div><div class="line">  public void run() &#123;</div><div class="line">    for (int i = 0; i &lt; 3; i++) &#123;</div><div class="line">        System.out.println(&quot;线程1第&quot; + i + &quot;次执行！&quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(50);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable implements Runnable &#123;</div><div class="line">  public void run() &#123;</div><div class="line">    for (int i = 0; i &lt; 3; i++) &#123;</div><div class="line">        System.out.println(&quot;线程2第&quot; + i + &quot;次执行！&quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(50);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">线程2第0次执行！</div><div class="line">线程1第0次执行！</div><div class="line">线程1第1次执行！</div><div class="line">线程2第1次执行！</div><div class="line">线程2第2次执行！</div><div class="line">线程1第2次执行！</div></pre></td></tr></table></figure>
+<p><strong>3. 线程调度——优先级</strong><br><code>void setPriority(int newPriority)</code>函数设置线程优先级<br>与线程休眠类似，线程的优先级仍然<strong>无法保障线程的执行次序</strong>。只不过，优先级高的线程获取CPU资源的概率较大，优先级低的并非没机会执行。</p>
+<ul>
+<li>线程的优先级用1-10之间的整数表示，数值越大优先级越高，默认的优先级为5。</li>
+<li>在一个线程中开启另外一个新线程，则新开线程称为该线程的子线程，子线程初始优先级与父线程相同。</li>
+</ul>
+<p><strong>setPriority()代码实例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by TyiMan on 2016/5/16.</div><div class="line"> */</div><div class="line">public class Test &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">    Thread t1 = new MyThread1();</div><div class="line">    Thread t2 = new Thread(new MyRunnable());</div><div class="line">    t1.setPriority(10);</div><div class="line">    t2.setPriority(1);</div><div class="line"></div><div class="line">    t2.start();</div><div class="line">    t1.start();</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyThread1 extends Thread &#123;</div><div class="line">  public void run() &#123;</div><div class="line">    for (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        System.out.println(&quot;线程1第&quot; + i + &quot;次执行！&quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(100);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable implements Runnable &#123;</div><div class="line">  public void run() &#123;</div><div class="line">    for (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        System.out.println(&quot;线程2第&quot; + i + &quot;次执行！&quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(100);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">线程1第0次执行！ </div><div class="line">线程2第0次执行！ </div><div class="line">线程2第1次执行！ </div><div class="line">线程1第1次执行！ </div><div class="line">线程2第2次执行！ </div><div class="line">线程1第2次执行！ </div><div class="line">线程1第3次执行！ </div><div class="line">线程2第3次执行！ </div><div class="line">线程2第4次执行！ </div><div class="line">线程1第4次执行！ </div><div class="line">线程1第5次执行！ </div><div class="line">线程2第5次执行！ </div><div class="line">线程1第6次执行！ </div><div class="line">线程2第6次执行！ </div><div class="line">线程1第7次执行！ </div><div class="line">线程2第7次执行！ </div><div class="line">线程1第8次执行！</div><div class="line">线程2第8次执行！</div><div class="line">线程1第9次执行！</div><div class="line">线程2第9次执行！</div></pre></td></tr></table></figure>
+<p><strong>4. 线程的调度——让步</strong></p>
+<p>线程的让步含义就是使当前运行着线程让出CPU资源，但是然给谁不知道，仅仅是让出，线程状态回到可运行状态。</p>
+<ul>
+<li>线程的让步使用Thread.yield()方法，yield() 为静态方法，功能是暂停当前正在执行的线程对象，并执行其他线程。</li>
+</ul>
+<p><strong>yield()代码实例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by TyiMan on 2016/5/16.</div><div class="line"> */</div><div class="line">public class Test &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">    Thread t1 = new MyThread1();</div><div class="line">    Thread t2 = new Thread(new MyRunnable());</div><div class="line"></div><div class="line">    t2.start();</div><div class="line">    t1.start();</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyThread1 extends Thread &#123;</div><div class="line">  public void run() &#123;</div><div class="line">    for (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        System.out.println(&quot;线程1第&quot; + i + &quot;次执行！&quot;);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable implements Runnable &#123;</div><div class="line">  public void run() &#123;</div><div class="line">    for (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        System.out.println(&quot;线程2第&quot; + i + &quot;次执行！&quot;);</div><div class="line">        Thread.yield();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">线程2第0次执行！</div><div class="line">线程1第0次执行！</div><div class="line">线程2第1次执行！</div><div class="line">线程1第1次执行！</div><div class="line">线程2第2次执行！</div><div class="line">线程1第2次执行！</div><div class="line">线程2第3次执行！</div><div class="line">线程1第3次执行！</div><div class="line">线程2第4次执行！</div><div class="line">线程1第4次执行！</div><div class="line">线程2第5次执行！</div><div class="line">线程1第5次执行！</div><div class="line">线程2第6次执行！</div><div class="line">线程1第6次执行！</div><div class="line">线程2第7次执行！</div><div class="line">线程1第7次执行！</div><div class="line">线程2第8次执行！</div><div class="line">线程1第8次执行！</div><div class="line">线程2第9次执行！</div><div class="line">线程1第9次执行！</div></pre></td></tr></table></figure>
+<blockquote>
+<p>在使用synchronized关键字时候，应该尽可能避免在synchronized方法或synchronized块中使用sleep或者yield方法，因为synchronized程序块占有着对象锁，sleep()让程序睡眠还不释放锁，不但严重影响效率，也不合逻辑。在同步程序块内调用yeild()方法让出CPU资源也没有意义，因为它占用着锁，其他互斥线程还是无法访问同步程序块。当然与同步程序块无关的线程可以获得更多的执行时间。</p>
+</blockquote>
+<p><strong>5. 线程的调度——合并</strong></p>
+<p>线程的合并的含义就是将几个并行线程的线程合并为一个单线程执行，在很多情况下，主线程生成并起动了子线程，如果子线程里要进行大量的耗时的运算，主线程往往将于子线程之前结束，但是如果主线程处理完其他的事务后，需要用到子线程的处理结果，也就是主线程需要等待子线程执行完成之后再结束，这个时候就要用到join()方法了。</p>
+<ul>
+<li>join()的作用是：“等待该线程终止”，这里需要理解的就是该线程是指的主线程等待子线程的终止。也就是在子线程调用了join()方法后面的代码，只有等到子线程结束了才能执行。</li>
+<li>join()为非静态方法，定义如下：<br>  <code>void join()</code>等待该线程终止。<br>  <code>void join(long millis)</code>等待该线程终止的时间最长为 millis 毫秒。<br>  <code>void join(long millis, int nanos)</code>等待该线程终止的时间最长为 millis 毫秒 + nanos 纳秒。</li>
+</ul>
+<p><strong>join()代码实例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">package tym.ThreadBase.waitAndnotify;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by TyiMan on 2016/5/16.</div><div class="line"> */</div><div class="line">public class Test &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">    Thread t1 = new MyThread1();</div><div class="line">    t1.start();</div><div class="line"></div><div class="line">    System.out.println(&quot;主线程开始执行！&quot;);</div><div class="line">    try &#123;</div><div class="line">        //t1线程合并到主线程中，主线程停止执行过程，转而执行t1线程，直到t1执行完毕后继续。</div><div class="line">        t1.join();</div><div class="line">    &#125; catch (InterruptedException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">    System.out.println(&quot;主线程执行完毕！&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyThread1 extends Thread &#123;</div><div class="line">public void run() &#123;</div><div class="line">    for (int i = 0; i &lt; 2; i++) &#123;</div><div class="line">        System.out.println(&quot;线程1第&quot; + i + &quot;次循环！&quot;);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">主线程第0次执行！</div><div class="line">线程1第0次执行！</div><div class="line">线程1第1次执行！</div><div class="line">主线程第1次执行！</div></pre></td></tr></table></figure>
+<p><strong>6. 守护线程</strong></p>
+<p>守护线程与普通线程写法上基本么啥区别，调用线程对象的方法setDaemon(true)，则可以将其设置为守护线程。<br>守护线程使用的情况较少，但并非无用，举例来说，JVM的垃圾回收、内存管理等线程都是守护线程。还有就是在做数据库应用时候，使用的数据库连接池，连接池本身也包含着很多后台线程，监控连接个数、超时时间、状态等等。</p>
+<blockquote>
+<p><strong>setDaemon方法的详细说明：</strong><br>public final void setDaemon(boolean on)将该线程标记为守护线程或用户线程。当正在运行的线程都是守护线程时，Java 虚拟机退出。<br>该方法必须在启动线程前调用。<br>该方法首先调用该线程的 checkAccess 方法，且不带任何参数。这可能抛出 SecurityException（在当前线程中）。<br> <strong>参数</strong>：     on - 如果为 true，则将该线程标记为守护线程。<br><strong>抛出</strong>：<br>IllegalThreadStateException - 如果该线程处于活动状态。<br>SecurityException - 如果当前线程无法修改该线程。   </p>
+</blockquote>
+<p><strong>setDaemon()代码实例</strong></p>
+<pre><code>package tym.ThreadBase.waitAndnotify;
+
+/**
+ * Created by TyiMan on 2016/5/16.
+ */
+public class Test {
+  public static void main(String[] args) {
+    Thread t1 = new MyCommon();
+    Thread t2 = new Thread(new MyDaemon());
+    t2.setDaemon(true);        //设置为守护线程
+
+    t2.start();
+    t1.start();
+  }
+}
+
+class MyCommon extends Thread {
+  public void run() {
+    for (int i = 0; i &lt; 5; i++) {
+        System.out.println(&quot;线程1第&quot; + i + &quot;次执行！&quot;);
+        try {
+            Thread.sleep(7);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+  }
+}
+
+class MyDaemon implements Runnable {
+  public void run() {
+    for (long i = 0; i &lt; 9999999L; i++) {
+        System.out.println(&quot;后台线程第&quot; + i + &quot;次执行！&quot;);
+        try {
+            Thread.sleep(7);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+  }
+}
+</code></pre><p>执行结果：<strong>守护进程随着主进程结束而结束</strong></p>
+<pre><code>后台线程第0次执行！
+线程1第0次执行！
+线程1第1次执行！
+后台线程第1次执行！
+后台线程第2次执行！
+线程1第2次执行！
+后台线程第3次执行！
+线程1第3次执行！
+后台线程第4次执行！
+线程1第4次执行！
+后台线程第5次执行！
+</code></pre><h4 id="线程基础总结"><a href="#线程基础总结" class="headerlink" title="线程基础总结"></a>线程基础总结</h4><p> 该部分为Java线程比较基础的部分，接下来会继续整理一些更加深入的知识。想到Java多线程基础，我们应该知道自己应该了解：</p>
+<ul>
+<li>Java线程的两种实现方式集成Thread类和实现Runnable接口，调用start()函数来启动线程。</li>
+<li>Java线程新建[new]、就绪[start()]、运行[执行run()]、阻塞[sleep(),join(),wait()、唤醒notify(),等待锁]、死亡[结束所有操作，stop()或destroy(),发生异常终止]的生命周期。</li>
+<li>了解线程同步的原理和作用、synchronized关键字的使用方法：同步方法和同步代码块，静态方法的同步。</li>
+<li>了解Java线程交互与调度函数wait(), notify(), notifyAll(), sleep(), setPriority(), yield(), join(), setDaemon()方法和使用。</li>
+</ul>
+<h4 id="参考引用"><a href="#参考引用" class="headerlink" title="参考引用"></a>参考引用</h4><p><a href="http://lavasoft.blog.51cto.com/62575/27069/" target="_blank" rel="external">http://lavasoft.blog.51cto.com/62575/27069/</a><br><a href="http://blog.csdn.net/csh624366188/article/details/7318245" target="_blank" rel="external">http://blog.csdn.net/csh624366188/article/details/7318245</a><br><a href="http://www.cnblogs.com/riskyer/p/3263032.html" target="_blank" rel="external">http://www.cnblogs.com/riskyer/p/3263032.html</a></p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+    <!-- 使用 DISQUS -->
+    <div id="disqus-comment">
+        <div id="disqus_thread"></div>
+<script>
+    queue.offer(function() {
+            var disqus_config = function () {
+                this.page.url = 'http://blog.code5bug.com/2017/03/26/Java基础知识复习笔记-3-线程基础/index.html';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            };
+
+            (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document;
+                var s = d.createElement('script');
+                s.src = '//null.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', + new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        });
+</script>
+
+    </div>
+    <style>
+        #disqus-comment{
+            background-color: #eee;
+            padding: 2pc;
+        }
+    </style>
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/03/26/Java基础知识复习笔记-2/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="TyiMan's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        TyiMan
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                主页
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    归档
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/03/">三月 2017<span class="sidebar_archives-count">3</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                分类
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Java基础/">Java基础<span class="sidebar_archives-count">3</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+        <li>
+            <a href="http://code5bug.com" title="About">
+                
+                    <i class="material-icons sidebar-material-icons">person</i>
+                
+                About
+            </a>
+        </li>
+        
+            <li class="divider"></li>
+        
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                文章总数
+                <span class="sidebar-badge">3</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            主题 - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+        <a href="http://weibo.com" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-weibo.png);">
+                <span class="visuallyhidden">Weibo</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.png);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+        <a href="https://www.zhihu.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-zhihu.png);">
+                <span class="visuallyhidden">Zhihu</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Bilibili -->
+    
+        <a href="http://www.bilibili.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-bilibili.png);">
+                <span class="visuallyhidden">Bilibili</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;TyiMan's Blog
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/js.min.js"></script>
+<script src="/js/nprogress.js"></script>
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+    <!-- 使用 DISQUS js 代码 -->
+    <script id="dsq-count-scr" src="//null.disqus.com/count.js" async></script>
+
+
+
+<!-- Swiftye -->
+
+
+<!-- Local Search-->
+
+    <script>
+    var searchFunc = function(path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: 'xml',
+            success: function( xmlResponse ) {
+                // get the contents from search data
+                var datas = $( 'entry', xmlResponse ).map(function() {
+                    return {
+                        title: $( 'title', this ).text(),
+                        content: $('content',this).text(),
+                        url: $( 'url' , this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function() {
+                    var str='<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = '';
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function(data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g,'').toLowerCase();
+                        var data_url = data.url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if(data_title !== '' && data_content !== '') {
+                            keywords.forEach(function(keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if( index_title < 0 && index_content < 0 ) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += '<li><a href="'+ data_url +'" class="search-result-title" target="_blank">'+ data_title;
+                            var content = data.content.trim().replace(/<[^>]+>/g, '');
+                            if (first_occur >= 0) {
+                                // cut out characters
+                                var start = first_occur - 6;
+                                var end = first_occur + 6;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 10;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function(keyword) {
+                                    var regS = new RegExp(keyword, 'gi');
+                                    match_content = match_content.replace(regS, '<em class="search-keyword">'+keyword+'</em>');
+                                })
+                                str += '<p class="search-result">' + match_content + '...</p>' +'</a>';
+                            }
+                        }
+                    });
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    }
+</script>
+
+
+    <script>
+        var inputArea = document.querySelector('#search');
+        var getSearchFile = function() {
+            var path = 'search.xml';
+            searchFunc(path, 'search', 'local-search-result');
+        }
+
+        if(inputArea) {
+            inputArea.onfocus = function() {
+                getSearchFile();
+            }
+        }
+    </script>
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+
+                </main>
+            </div>
+        </body>
+    
+</html>
